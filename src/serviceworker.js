@@ -21,7 +21,7 @@ self.addEventListener('install', event => {
 				'js/bundle.js',
 				'https://de.wikipedia.org/w/load.php?debug=false&lang=de&modules=site&only=styles&skin=vector'
 			]);
-		})
+		}).then(self.skipWaiting())
 	);
 });
 
@@ -36,7 +36,7 @@ self.addEventListener('activate', event => {
 					}
 				})
 			);
-		})
+		}).then(self.clients.claim())
 	);
 });
 

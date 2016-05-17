@@ -4,14 +4,19 @@
 $(document).ready(() => {
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register('serviceworker.js').then(() => {
-			if (!navigator.serviceWorker.controller) {
-				location.reload();
-			}
+			navigator.serviceWorker.oncontrollerchange = () => {
+				$(window).trigger('hashchange');
+			};
 		}).catch(error => {
+			if (location.protocol !== 'https:') {
+				$('#errorDescription').html($.parseHTML('ServiceWorker funktionieren nur auf über HTTPS ausgelieferten Seiten. Bitte rufen sie die <a href="https://carlomorgenstern.github.io/offline-wiki/">Seite über HTTPS auf.</a>'));
+			} else {
+				$('#errorDescription').text('Bitte laden Sie die Seite neu und kontaktieren Sie bei wiederholter Fehlermeldung den Ersteller der Seite.');
+			}
 			$('#errorTitle').text('ServiceWorker-Registrierung fehlgeschlagen');
-			$('#errorDescription').text('Bitte laden Sie die Seite neu und kontaktieren Sie bei wiederholter Fehlermeldung den Ersteller der Seite.');
 			$('#errorCard').removeClass('hide');
 			$('#storeOffline').prop('disabled', true);
+			$('#progressBar').addClass('hide');
 			console.log('ServiceWorker registration failed: ', error);
 		});
 	} else {
@@ -20,6 +25,7 @@ $(document).ready(() => {
 			'Bitte besuchen Sie die Seite mit einem Browser, der ServiceWorker implementiert. <a href="https://jakearchibald.github.io/isserviceworkerready/">(IsServiceWorkerReady?)</a>'));
 		$('#errorCard').removeClass('hide');
 		$('#storeOffline').prop('disabled', true);
+		$('#progressBar').addClass('hide');
 	}
 
 	$('#search').change(() => {
@@ -58,10 +64,12 @@ $(document).ready(() => {
 				sendMessage('listArticles').then(articles => {
 					if (articles.length !== 0) {
 						$('#offlineArticles').html('');
+						articles.forEach(article => {
+							$('#offlineArticles').append('<a href="#' + article.title + '" class="collection-item">' + article.title + '</a>');
+						});
 					}
-					articles.forEach(article => {
-						$('#offlineArticles').append('<a href="#' + article.title + '" class="collection-item">' + article.title + '</a>');
-					});
+				}, error => {
+					console.log('Error while adding offline articles: ', error);
 				}).then(() => $('#progressBar').addClass('hide'));
 			});
 		} else {
@@ -174,10 +182,14 @@ $(document).ready(() => {
 					resolve(event.data);
 				}
 			};
-			navigator.serviceWorker.controller.postMessage({
-				command: command,
-				identifier: identifier
-			}, [messageChannel.port2]);
+			if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+				navigator.serviceWorker.controller.postMessage({
+					command: command,
+					identifier: identifier
+				}, [messageChannel.port2]);
+			} else {
+				reject('Active serviceWorker is null');
+			}
 		});
 	}
 });
