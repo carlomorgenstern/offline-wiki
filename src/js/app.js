@@ -3,7 +3,7 @@
 'use strict';
 $(document).ready(() => {
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/serviceworker.js').then(() => {
+		navigator.serviceWorker.register('serviceworker.js').then(() => {
 			if (!navigator.serviceWorker.controller) {
 				location.reload();
 			}
