@@ -139,7 +139,9 @@ gulp.task('css', ['copyLibs'], function() {
         .pipe(browserSync.stream());
 });
 
-gulp.task('serve', ['clean', 'updateLibs', 'copyLibs', 'html', 'js', 'SWjs', 'css'], function() {
+gulp.task('build', ['clean', 'updateLibs', 'copyLibs', 'html', 'js', 'SWjs', 'css']);
+
+gulp.task('serve', ['build'], function() {
     browserSync.init({
         server: './dist'
     });

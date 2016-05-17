@@ -9,16 +9,16 @@ self.addEventListener('install', event => {
 	event.waitUntil(
 		caches.open(CACHE_NAME).then(cache => {
 			return cache.addAll([
-				'/index.html',
-				'/nosearch.html',
-				'/css/styles.css',
-				'/fonts/MaterialIcons-Regular.woff2',
-				'/fonts/roboto/Roboto-Bold.woff2',
-				'/fonts/roboto/Roboto-Light.woff2',
-				'/fonts/roboto/Roboto-Medium.woff2',
-				'/fonts/roboto/Roboto-Regular.woff2',
-				'/fonts/roboto/Roboto-Thin.woff2',
-				'/js/bundle.js',
+				'index.html',
+				'nosearch.html',
+				'css/styles.css',
+				'fonts/MaterialIcons-Regular.woff2',
+				'fonts/roboto/Roboto-Bold.woff2',
+				'fonts/roboto/Roboto-Light.woff2',
+				'fonts/roboto/Roboto-Medium.woff2',
+				'fonts/roboto/Roboto-Regular.woff2',
+				'fonts/roboto/Roboto-Thin.woff2',
+				'js/bundle.js',
 				'https://de.wikipedia.org/w/load.php?debug=false&lang=de&modules=site&only=styles&skin=vector'
 			]);
 		})
