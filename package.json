@@ -7,7 +7,7 @@
     "url": "git+https://github.com/carlomorgenstern/offline-wiki.git"
   },
   "author": "Carlo Morgenstern",
-  "license": "LGPL-3.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/carlomorgenstern/offline-wiki/issues"
   },
